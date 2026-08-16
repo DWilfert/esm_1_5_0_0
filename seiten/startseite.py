@@ -6,7 +6,6 @@ from verbindung import (
     hole_firmen_daten,
     hole_wartungsuebersicht_daten
 )
-
 def zeige_startseite():
     st.title("Vertrags- & Wartungsmanagement")
     st.markdown("EXECUTIVE DASHBOARD & SYSTEM-CONTROLLING V1.5.0.0")
