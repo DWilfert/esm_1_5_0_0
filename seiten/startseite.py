@@ -8,8 +8,8 @@ from verbindung import (
 )
 
 def zeige_startseite():
-    st.markdown("## Vertrags- & Wartungsmanagement")
-    st.markdown("### EXECUTIVE DASHBOARD & SYSTEM-CONTROLLING V1.5.0.0")
+    st.markdown("<h1 style='font-size: 2.5rem; font-weight: 700; margin-bottom: 0px;'>Vertrags- & Wartungsmanagement</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 1.1rem; color: #a0aec0; margin-top: 0px;'>EXECUTIVE DASHBOARD & SYSTEM-CONTROLLING V1.5.0.0</p>", unsafe_allow_html=True)
     st.markdown("---")
 
     # Daten laden
@@ -46,4 +46,4 @@ def zeige_startseite():
     if not df_anlagen.empty:
         st.dataframe(df_anlagen, use_container_width=True)
     else:
-        st.info("Keine Standorten- oder Anlagendaten verfügbar.")
+        st.info("Keine Standorten- or Anlagendaten verfügbar.")
