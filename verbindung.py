@@ -28,41 +28,41 @@ def initialisiere_beispieldaten():
 
 def hole_anlagen_daten():
     return pd.DataFrame({
-        "id": [1, 2], 
-        "anlagebezeichnung": ["Demo-Aufzug 01", "Demo-Lüftung 02"],
-        "anlagenr": ["17501", "17502"],
-        "standort_text": ["NP", "FG"],
-        "zustand": ["Betriebsbereit", "Wartung anstehend"]
+        "id": [1, 2, 3],
+        "anlagebezeichnung": ["Demo-Aufzug 01", "Demo-Lüftung 02", "Demo-Kälteanlage 03"],
+        "anlagenr": ["17501", "17502", "17503"],
+        "standort_text": ["NP", "FG", "MUC"],
+        "zustand": ["Betriebsbereit", "Wartung anstehend", "Betriebsbereit"]
     })
 
 def hole_wartungsvertraege_daten():
     return pd.DataFrame({
-        "id": [1, 2], 
-        "vertragsname": ["Demo-Wartung Aufzug", "Demo-Wartung Klima"],
-        "kosten_bestand_pa": [2400.0, 1800.0],
-        "benchmark_ais_pa": [2100.0, 1500.0],
-        "naechste_wartung": [pd.Timestamp.now(), pd.Timestamp.now()],
-        "zyklus_monate": [6, 12]
+        "id": [1, 2, 3],
+        "vertragsname": ["Demo-Wartung Aufzug", "Demo-Wartung Klima", "Demo-Wartung Kälte"],
+        "kosten_bestand_pa": [2400.0, 1800.0, 3200.0],
+        "benchmark_ais_pa": [2100.0, 1500.0, 2900.0],
+        "naechste_wartung": [pd.Timestamp.now() + pd.Timedelta(days=10), pd.Timestamp.now() + pd.Timedelta(days=20), pd.Timestamp.now() + pd.Timedelta(days=5)],
+        "zyklus_monate": [6, 12, 12]
     })
 
 def hole_firmen_daten():
     return pd.DataFrame({
-        "id": [1], 
-        "firmenname": ["Demo-Partner GmbH"]
+        "id": [1, 2],
+        "firmenname": ["Demo-Partner GmbH", "Service AG"]
     })
 
 def hole_wartungsuebersicht_daten():
     return pd.DataFrame({
-        "id": [1, 2],
-        "anlagebezeichnung": ["Demo-Aufzug 01", "Demo-Lüftung 02"],
-        "vertragsname": ["Demo-Wartung Aufzug", "Demo-Wartung Klima"],
-        "standort": ["NP", "FG"],
-        "naechste_wartung": [pd.Timestamp.now(), pd.Timestamp.now()],
-        "intervall_monate": [6, 12]
+        "id": [1, 2, 3],
+        "anlagebezeichnung": ["Demo-Aufzug 01", "Demo-Lüftung 02", "Demo-Kälteanlage 03"],
+        "vertragsname": ["Demo-Wartung Aufzug", "Demo-Wartung Klima", "Demo-Wartung Kälte"],
+        "standort": ["NP", "FG", "MUC"],
+        "naechste_wartung": [pd.Timestamp.now() + pd.Timedelta(days=10), pd.Timestamp.now() + pd.Timedelta(days=20), pd.Timestamp.now() + pd.Timedelta(days=5)],
+        "intervall_monate": [6, 12, 12]
     })
 
 def hole_untergewerk_daten():
     return pd.DataFrame({
-        "unter_nr": ["4610", "4310"],
-        "unter_txt": ["Aufzugsanlagen", "Lüftungsanlagen"]
+        "unter_nr": ["4610", "4310", "4400"],
+        "unter_txt": ["Aufzugsanlagen", "Lüftungsanlagen", "Kälteanlagen"]
     })
