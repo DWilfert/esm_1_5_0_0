@@ -8,12 +8,15 @@ from verbindung import (
 )
 
 def zeige_startseite():
-    # Hier wird die Überschrift nun spezifisch für die Startseite vergrößert
+    # Wir setzen hier eine Klasse 'main-headline', die wir gleich per CSS erzwingen
     st.markdown(
         """
-        <h1 style='font-size: 3.5rem !important; line-height: 1.2 !important;'>Vertrags- & Wartungsmanagement</h1>
-        <p style='font-size: 1.3rem !important; color: var(--theme-muted); margin-top: -10px; margin-bottom: 25px;'>EXECUTIVE DASHBOARD & SYSTEM-CONTROLLING V1.5.0.0</p>
-        """, 
+        <style>
+        .main-headline { font-size: 3.5rem !important; font-weight: 800 !important; color: white !important; }
+        </style>
+        <div class="main-headline">Vertrags- & Wartungsmanagement</div>
+        <div style='font-size: 1.2rem; color: #93c5fd; margin-bottom: 20px;'>EXECUTIVE DASHBOARD & SYSTEM-CONTROLLING V1.5.0.0</div>
+        """,
         unsafe_allow_html=True
     )
     st.markdown("---")
