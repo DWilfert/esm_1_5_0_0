@@ -7,7 +7,7 @@ from verbindung import (
     hole_wartungsuebersicht_daten
 )
 
-def anzeigen():
+def zeige_startseite():
     st.title("Vertrags- & Wartungsmanagement")
     st.markdown("EXECUTIVE DASHBOARD & SYSTEM-CONTROLLING V1.5.0.0")
 
@@ -19,7 +19,7 @@ def anzeigen():
     # Kennzahlen berechnen
     gesamt_vertraege = len(df_vertraege)
     gesamt_volumen = df_vertraege["kosten_bestand_pa"].sum() if "kosten_bestand_pa" in df_vertraege.columns else 0.0
-    optimierte_einsparung = 1200.0  # Beispielwert oder berechnet
+    optimierte_einsparung = 1200.0
 
     # Metriken anzeigen
     col1, col2, col3, col4 = st.columns(4)
