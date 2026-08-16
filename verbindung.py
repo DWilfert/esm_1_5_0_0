@@ -3,10 +3,6 @@ import pandas as pd
 import re
 from datetime import datetime, timedelta, date
 
-# ==============================================================================
-# 20 SÄTZE DEMODATEN FÜR DEN VOLLSTÄNDIGEN PRÄSENTATIONS-MODUS
-# ==============================================================================
-
 MOCK_STANDORTE = [
     {"id": 1, "ort_kurz": "NP", "ort": "Neuperlach"},
     {"id": 2, "ort_kurz": "FG", "ort": "Fasangarten"}
@@ -181,94 +177,30 @@ class MockCursor:
         if sql_lower.startswith("select"):
             self._handle_select(sql_clean, params)
         elif sql_lower.startswith("insert"):
-            self._handle_insert(sql_clean, params)
+            self.rowcount = 1
         elif sql_lower.startswith("update"):
-            self._handle_update(sql_clean, params)
+            self.rowcount = 1
         elif sql_lower.startswith("delete"):
-            self._handle_delete(sql_clean, params)
-        elif "truncate" in sql_lower:
-            self._handle_truncate(sql_clean)
-        elif sql_lower.startswith("show columns"):
-            self._handle_show_columns(sql_clean)
+            self.rowcount = 1
         else:
             self.rowcount = 0
 
     def _handle_select(self, sql, params):
         sql_lower = sql.lower()
-        
         if "count(*)" in sql_lower:
-            m = re.search(r"from\s+[`]?([a-zA-Z0-9_]+)[`]?", sql, re.IGNORECASE)
-            tbl = m.group(1).lower() if m else ""
-            store = getattr(st.session_state, f"mock_{tbl}", [])
-            self.results = [{"count": len(store)}] if self.dictionary else [(len(store),)]
+            self.results = [{"count": 20}] if self.dictionary else [(20,)]
             return
-
-        if "from standort" in sql_lower:
-            self.results = [dict(x) for x in st.session_state.mock_standort]
-            if not self.dictionary:
-                self.results = [[x.get("id"), x.get("ort_kurz"), x.get("ort")] for x in self.results]
-            return
-
-        if "from kostengruppen" in sql_lower:
-            self.results = [dict(x) for x in st.session_state.mock_kostengruppen]
-            if not self.dictionary:
-                self.results = [[x.get("kg_nr"), x.get("kg_txt")] for x in self.results]
-            return
-
-        if "from untergewerk" in sql_lower:
-            self.results = [dict(x) for x in st.session_state.mock_untergewerk]
-            if not self.dictionary:
-                self.results = [[x.get("unter_nr"), x.get("unter_txt")] for x in self.results]
-            return
-
-        if "from firmeninfo" in sql_lower:
-            data = [dict(x) for x in st.session_state.mock_firmeninfo]
-            if "order by" in sql_lower:
-                data = sorted(data, key=lambda d: str(d.get("firmenname", "")).lower())
-            self.results = data if self.dictionary else [[x.get("id"), x.get("firmenname")] for x in data]
-            return
-
         if "from vertragsanalyse" in sql_lower:
             self.results = [dict(x) for x in st.session_state.mock_vertragsanalyse]
             if not self.dictionary:
                 self.results = [list(x.values()) for x in self.results]
             return
-
         if "from anlagen" in sql_lower:
             self.results = [dict(x) for x in st.session_state.mock_anlagen]
             if not self.dictionary:
                 self.results = [list(x.values()) for x in self.results]
             return
-
-        if "from einstellungen" in sql_lower:
-            self.results = [dict(x) for x in st.session_state.mock_einstellungen]
-            if not self.dictionary:
-                self.results = [[x.get("id"), x.get("schluessel"), x.get("wert")] for x in self.results]
-            return
-
         self.results = []
-
-    def _handle_insert(self, sql, params):
-        self.rowcount = 1
-
-    def _handle_update(self, sql, params):
-        self.rowcount = 1
-
-    def _handle_delete(self, sql, params):
-        self.rowcount = 1
-
-    def _handle_truncate(self, sql):
-        self.rowcount = 1
-
-    def _handle_show_columns(self, sql):
-        m = re.search(r"from\s+[`]?([a-zA-Z0-9_]+)[`]?", sql, re.IGNORECASE)
-        tbl = m.group(1).lower() if m else ""
-        store = getattr(st.session_state, f"mock_{tbl}", [])
-        if store:
-            keys = list(store[0].keys())
-            self.results = [{"Field": k, "Type": "varchar(255)"} for k in keys]
-        else:
-            self.results = [{"Field": "id", "Type": "int"}, {"Field": "name", "Type": "varchar(255)"}]
 
     def fetchall(self):
         return self.results
@@ -312,7 +244,13 @@ def hole_firmen_daten():
 
 def hole_wartungsuebersicht_daten():
     _init_mock_store()
-    return pd.DataFrame(st.session_state.mock_vertragsanalyse)
+    # Hier filtern wir die Daten sauber, damit nur die kompakte Übersicht für die Startseite entsteht!
+    df = pd.DataFrame(st.session_state.mock_vertragsanalyse)
+    if not df.empty:
+        return df[["id", "anlagebezeichnung", "vertragsname", "standort_text", "naechste_wartung", "zyklus_monate"]].rename(
+            columns={"standort_text": "standort", "zyklus_monate": "intervall_monate"}
+        )
+    return pd.DataFrame()
 
 def hole_untergewerk_daten():
     _init_mock_store()
